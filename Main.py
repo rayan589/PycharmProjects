@@ -5,6 +5,8 @@ import pandas as pd
 import DetectChars
 import DetectPlates
 import cv2
+import time
+import RPi.GPIO as GPIO
 
 # module level variables ##########################################################################
 SCALAR_BLACK = (0.0, 0.0, 0.0)
@@ -88,6 +90,28 @@ def main():
                 file1 = open("/Users/macbookpro/Documents/LP_Timeline.txt", "a")
                 file1.write("".join(gh))
                 file1.close()
+                
+                servoPIN = 17
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(servoPIN, GPIO.OUT)
+
+        p = GPIO.PWM(servoPIN, 50)  # GPIO 17 for PWM with 50Hz
+        p.start(100)  # Initialization
+
+
+
+
+
+
+
+
+
+        if licPlate.strChars in df.LP.values:
+            p.ChangeDutyCycle(10)
+            time.sleep(2)
+            p.ChangeDutyCycle(4)
+            p.stop()
+            GPIO.cleanup()
     # end if else
 
     cv2.waitKey(0)					# hold windows open until user presses a key
